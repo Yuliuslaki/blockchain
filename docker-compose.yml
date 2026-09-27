@@ -1,0 +1,31 @@
+services:
+  node1:
+    build: .
+    container_name: blockchain_node_1
+    ports:
+      - "5001:5001"
+    command: ["5001", "node2:5002,node3:5003"]
+    networks:
+      - blockchain-net
+
+  node2:
+    build: .
+    container_name: blockchain_node_2
+    ports:
+      - "5002:5002"
+    command: ["5002", "node1:5001,node3:5003"]
+    networks:
+      - blockchain-net
+
+  node3:
+    build: .
+    container_name: blockchain_node_3
+    ports:
+      - "5003:5003"
+    command: ["5003", "node1:5001,node2:5002"]
+    networks:
+      - blockchain-net
+
+networks:
+  blockchain-net:
+    driver: bridge
